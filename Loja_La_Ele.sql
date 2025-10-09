@@ -5,13 +5,13 @@ USE Loja_Madeira;
 create table usuarios
 (
     id_usuario int unsigned not null auto_increment,
-    login_usuario varchar(30) not null unique,
-    senha_usuario varchar(40) not null,
-    nome_usuario varchar(100) not null,
+    login_usuario varchar(30) unique,
+    senha_usuario varchar(40) ,
+    nome_usuario varchar(100) ,
     primary key (id_usuario)
 );
 
-CREATE TABLE Chapa (
+CREATE TABLE chapa (
     Cod_Chapa INT NOT NULL PRIMARY KEY auto_increment,
     Nome_Tipo VARCHAR(100) NOT NULL,
     Largura_MM DECIMAL(10,2) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE Chapa (
     Valor_Chapa DECIMAL(10,2) NOT NULL
 );
 
-CREATE TABLE Peca (
+CREATE TABLE peca (
     Cod_Peca INT NOT NULL PRIMARY KEY auto_increment,
     Nome_Peca VARCHAR(100) NOT NULL,
     Largura_MM DECIMAL(10,2) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE Peca (
     Espessura DECIMAL(10,2) NOT NULL
 );
 
-CREATE TABLE Producao_Peca (
+CREATE TABLE producao_peca (
     Cod_Producao INT NOT NULL PRIMARY KEY,
     Cod_Chapa INT NOT NULL,
     Cod_Peca INT NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE Producao_Peca (
 );
 
 
-INSERT INTO Chapa VALUES 
+INSERT INTO chapa VALUES 
  (1, 'Mogno', 2750, 1850, 18, 2, 82.42),
  (2, 'Mogno', 2200, 1600, 15, 2,47.52),
  (3, 'Mogno', 1830, 1220, 15,  2,30.14),
@@ -62,7 +62,7 @@ INSERT INTO Chapa VALUES
 
 CREATE VIEW view_custo_peca_madeira AS 
 SELECT
-    mt.Nome_Tipo AS Chapa,
+    mt.Nome_Tipo AS chapa,
     p.Nome_Peca,
     pp.Qtde_Pecas,
     c.Largura_MM * c.Altura_MM * c.Espessura AS Volume_Chapa_mm3,
@@ -70,10 +70,10 @@ SELECT
     ROUND(c.Valor_Chapa / (c.Largura_MM * c.Altura_MM * c.Espessura), 8) AS Preco_mm3,
     ROUND((p.Largura_MM * p.Altura_MM * p.Espessura * pp.Qtde_Pecas) * (c.Valor_Chapa / (c.Largura_MM * c.Altura_MM * c.Espessura)), 2) AS Custo_Total
 FROM 
-    Producao_Peca pp
-JOIN Peca p ON p.Cod_Peca = pp.Cod_Peca
-JOIN Chapa c ON c.Cod_Chapa = pp.Cod_Chapa
-JOIN Chapa mt ON mt.Cod_Chapa = c.Cod_Chapa;
+    producao_peca pp
+JOIN peca p ON p.Cod_Peca = pp.Cod_Peca
+JOIN chapa c ON c.Cod_Chapa = pp.Cod_Chapa
+JOIN chapa mt ON mt.Cod_Chapa = c.Cod_Chapa;
 
 
 

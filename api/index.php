@@ -115,14 +115,14 @@ function api_pecas($id)
     {
         case 'GET':
             session_start();
-            $pecas = select(['*'], 'Peca', [is_null($id) ? "" : "Cod_Peca = $id"]);
+            $pecas = select(['*'], 'peca', [is_null($id) ? "" : "Cod_Peca = $id"]);
             $codigo = count($pecas) > 0 ? 200 : 400;
             $mensagem = count($pecas) > 0 ? 'ok.' : 'nenhum resultado.';
             retorno($codigo, $mensagem, $pecas);
             break;
         case 'DELETE':
             if (is_null($id)) retorno(400, 'proibido apagar todos');
-            $afetados = delete('Peca', "Cod_Peca = $id");
+            $afetados = delete('peca', "Cod_Peca = $id");
             $codigo = $afetados > 0 ? 200 : 400;
             $mensagem = $afetados > 0 ? 'ok.' : 'nenhum resultado.';
             retorno($codigo, $mensagem, ['removidos' => $afetados]);
@@ -133,7 +133,7 @@ function api_pecas($id)
             if (!isset($_POST['campos']) || !isset($_POST['valores'])) {
                 retorno(400, 'Campos ou valores não enviados.');
             }
-            $afetados = insert('Peca', $_POST['campos'], $_POST['valores']);
+            $afetados = insert('peca', $_POST['campos'], $_POST['valores']);
             $codigo = $afetados > 0 ? 200 : 400;
             $mensagem = $afetados > 0 ? 'peca criada.' : 'nao criado.';
             retorno($codigo, $mensagem, ['criados' => $afetados]);
@@ -181,3 +181,4 @@ function api_chapa($id)
             break;
     }
 }
+
